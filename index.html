@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>PathFinder AI - Career Guidance for Tier-2/3 Cities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f3f6f9;--card:#fff;--ink:#14212e;--mut:#5b6b7a;--navy:#102f52;--navy2:#0b2340;--teal:#0f8b8d;--teal2:#0b6f71;--amber:#f2a93b;--line:#e1e8ee;--ok:#e3f4ee;--okt:#0b6b50;--gap:#fdf0d9;--gapt:#8a5a00;--sh:0 1px 2px rgba(16,47,82,.06),0 10px 28px rgba(16,47,82,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1822;--card:#16232f;--ink:#e8eef3;--mut:#9fb0be;--line:#27384a;--ok:#12362c;--okt:#7fe0bd;--gap:#3b2f14;--gapt:#f2c777;--sh:0 1px 2px rgba(0,0,0,.3)}}
+:root[data-theme="dark"]{--bg:#0d1822;--card:#16232f;--ink:#e8eef3;--mut:#9fb0be;--line:#27384a;--ok:#12362c;--okt:#7fe0bd;--gap:#3b2f14;--gapt:#f2c777;--sh:0 1px 2px rgba(0,0,0,.3)}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 64px);scroll-behavior:smooth}*{box-sizing:border-box}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--navy2);z-index:30}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:31;background:var(--navy2);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:800;letter-spacing:-.01em}.brand svg{flex:none}
+.top nav{display:flex;gap:18px;font-size:.85rem}.top nav a{color:#cfe0ee;text-decoration:none}.top nav a:hover{color:#fff}@media(max-width:700px){.top nav{display:none}}
+.sdg{background:var(--amber);color:#14365d;font-weight:700;font-size:.72rem;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.hero{background:linear-gradient(135deg,var(--navy) 0%,#0e6a75 100%);color:#fff;padding:40px 16px 34px}
+.hi{max-width:880px;margin:0 auto}
+.hero h1{margin:0 0 12px;font-size:clamp(1.8rem,5.5vw,2.8rem);line-height:1.12;letter-spacing:-.025em;font-weight:800}
+.hero p{margin:0;max-width:620px;color:#d4e6ee;font-size:1.05rem}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 4px}.pills span{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:4px 12px;font-size:.82rem}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px}@media(max-width:600px){.steps{grid-template-columns:1fr 1fr}}
+.steps a{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:12px;padding:10px 12px;color:#fff;text-decoration:none;font-weight:600;font-size:.9rem;transition:background .2s}
+.steps a:hover{background:rgba(255,255,255,.16)}.steps b{flex:none;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.2);display:grid;place-items:center;font-size:.8rem}
+.steps small{display:block;font-weight:400;font-size:.74rem;color:#bcd5df}.steps a.done b{background:var(--amber);color:#14365d}
+main{max-width:880px;margin:0 auto;padding:20px 16px 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:18px;box-shadow:var(--sh)}
+h2{display:flex;align-items:center;gap:10px;margin:0 0 12px;font-size:1.2rem;letter-spacing:-.01em}h3{margin:0;font-size:1.05rem;letter-spacing:-.01em}
+.n{flex:none;width:28px;height:28px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-size:.85rem;font-weight:700}
+label{display:block;font-weight:600;font-size:.86rem;margin:14px 0 5px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);font:inherit;transition:border-color .2s,box-shadow .2s}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--teal);box-shadow:0 0 0 3px rgba(15,139,141,.2)}
+textarea{min-height:88px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}@media(max-width:560px){.row{grid-template-columns:1fr}}
+.chips{display:flex;flex-wrap:wrap;gap:8px}.grp{margin-top:12px}.gt{font-size:.74rem;font-weight:700;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.chip{min-height:36px;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:99px;padding:6px 14px;font:inherit;font-size:.88rem;cursor:pointer;transition:all .15s}
+.chip:hover{border-color:var(--teal)}.chip.on{background:var(--teal);border-color:var(--teal);color:#fff;font-weight:600}
+.tag{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.78rem;font-weight:500;margin:3px 5px 3px 0}.tag.ok{background:var(--ok);color:var(--okt)}.tag.gap{background:var(--gap);color:var(--gapt)}
+.btn{display:inline-block;background:var(--teal);color:#fff;border:1px solid var(--teal);border-radius:10px;padding:10px 18px;font:inherit;font-weight:600;font-size:.92rem;cursor:pointer;margin:12px 8px 0 0;text-decoration:none;transition:background .15s,transform .1s}
+.btn:hover{background:var(--teal2)}.btn:active{transform:translateY(1px)}
+.btn.sec{background:transparent;color:var(--teal)}.btn.sec:hover{background:var(--ok)}.btn.alt{background:var(--navy);border-color:var(--navy)}.btn.warn{background:transparent;color:#c0392b;border-color:#c0392b}
+.btn.light{background:#fff;color:var(--navy);border-color:#fff;margin-top:20px}.btn.light:hover{background:#e8f1f5}
+:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+.job{border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px;transition:border-color .2s}.job:hover{border-color:var(--teal)}
+.jh{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.best{display:inline-block;background:var(--amber);color:#14365d;font-size:.68rem;font-weight:700;border-radius:99px;padding:1px 8px;vertical-align:middle;margin-left:4px}
+.score{flex:none;border-radius:99px;padding:3px 12px;font-weight:700;font-size:.8rem;background:var(--ok);color:var(--okt)}.score.mid{background:var(--gap);color:var(--gapt)}.score.lo{background:var(--line);color:var(--mut)}
+.bar{height:8px;border-radius:99px;background:var(--line);margin:10px 0;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),#3cc0b0);border-radius:99px;transition:width .4s}
+.hint{color:var(--mut);font-size:.84rem}
+.empty{text-align:center;padding:28px 12px;color:var(--mut);border:1px dashed var(--line);border-radius:12px}
+.ck{display:flex;gap:10px;align-items:flex-start;font-weight:500;margin:8px 0;padding:10px;border:1px solid var(--line);border-radius:10px}.ck input{width:auto;margin-top:4px;accent-color:var(--teal)}
+.week{border-left:3px solid var(--amber);background:var(--bg);border-radius:0 10px 10px 0;padding:8px 12px;margin:8px 0;font-size:.92rem}
+.resume{background:#fff;color:#111;border:1px solid var(--line);border-radius:12px;padding:26px;white-space:pre-wrap;font-family:Georgia,"Times New Roman",serif;font-size:.94rem;margin-top:14px;box-shadow:inset 0 0 0 1px #f0f0f0}
+.hide{display:none}
+footer{background:var(--navy2);color:#b9cbd9;margin-top:24px;padding:28px 16px;font-size:.84rem}
+.fi{max-width:880px;margin:0 auto;display:grid;grid-template-columns:repeat(3,1fr);gap:22px}@media(max-width:700px){.fi{grid-template-columns:1fr}}
+footer b{color:#fff;display:block;margin-bottom:4px}footer p{margin:0}
+@media print{.np,.top,.hero,footer{display:none!important}body,.card{background:#fff;border:0;box-shadow:none}.resume{border:0;padding:0;box-shadow:none}}
+</style>
+</head>
+<body>
+<header class="top np"><div class="brand"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="12" fill="none" stroke="#f2a93b" stroke-width="2"/><path d="M13 5l3.5 8-3.5 8-3.5-8z" fill="#3cc0b0"/></svg>PathFinder AI</div><nav><a href="#profile">Profile</a><a href="#results">Matches</a><a href="#plan">Skill plan</a><a href="#resCard">Résumé</a></nav><span class="sdg">SDG 8</span></header>
+<section class="hero np"><div class="hi">
+<h1>Find the right job path, wherever you live.</h1>
+<p>PathFinder AI turns your skills, interests and city into ranked job matches, a clear skill-building plan and a ready-to-send résumé. Built for job seekers in Tier-2/3 cities.</p>
+<div class="pills"><span>Free for job seekers</span><span>Works on any phone</span><span>Saved only on your device</span></div>
+<a class="btn light" href="#profile">Build my career path</a>
+<div class="steps"><a href="#profile"><b>1</b><span>Profile<small>Skills and goals</small></span></a><a href="#results"><b>2</b><span>Matches<small>Ranked roles</small></span></a><a href="#plan"><b>3</b><span>Skill plan<small>Close the gaps</small></span></a><a href="#resCard"><b>4</b><span>Résumé<small>Ready to send</small></span></a></div>
+</div></section>
+<main>
+<section class="card np" id="profile">
+<h2><span class="n">1</span>Your profile</h2>
+<div class="row">
+<div><label for="name">Full name</label><input id="name" placeholder="e.g. Anita Sharma" autocomplete="name"></div>
+<div><label for="city">City</label><select id="city"></select></div>
+<div><label for="edu">Education</label><select id="edu"></select></div>
+<div><label for="mode">Work preference</label><select id="mode"><option value="any">Remote or on-site</option><option value="remote">Remote / work from home</option><option value="onsite">On-site in my city</option></select></div>
+</div>
+<label for="q">Your skills: tap to select, search, or type your own and press Enter</label>
+<input id="q" placeholder="Search or add a skill" autocomplete="off">
+<div id="cust" class="chips" style="margin-top:8px"></div>
+<div id="sk"></div>
+<label>Interests (optional)</label><div class="chips" id="int"></div>
+<button class="btn warn" id="reset">Reset all</button>
+</section>
+
+<section class="card np" id="results">
+<h2><span class="n">2</span>Your best-fit roles</h2>
+<p class="hint">Live match score = skills 65% (core skills count double) + interests 15% + work preference 10% + education fit 10%. It updates as you change your profile.</p>
+<div id="rl"></div>
+<button class="btn alt" id="rep">Copy my career report</button>
+</section>
+
+<section class="card np hide" id="plan"><h2><span class="n">3</span>Your skill plan</h2><div id="pb"></div></section>
+
+<section class="card hide" id="resCard">
+<h2 class="np"><span class="n">4</span>Your résumé</h2>
+<div class="np">
+<div class="row">
+<div><label for="contact">Email or phone</label><input id="contact" autocomplete="email"></div>
+<div></div>
+</div>
+<label for="sum">Professional summary (edit freely)</label><textarea id="sum"></textarea>
+<button class="btn sec" id="regen">Regenerate summary</button>
+<label for="exp">Experience, projects or internships (one per line, optional)</label><textarea id="exp" placeholder="Built a small website for a local shop&#10;Managed accounts at a family business"></textarea>
+</div>
+<div class="resume" id="rp"></div>
+<div class="np"><button class="btn" id="copy">Copy text</button><button class="btn alt" id="dl">Download .txt</button><button class="btn sec" id="print">Print / Save as PDF</button></div>
+</section>
+</main>
+<footer class="np"><div class="fi"><div><b>PathFinder AI</b><p>AI-assisted career guidance for job seekers in Tier-2/3 cities. Aligned with SDG 8: Decent Work and Economic Growth (targets 8.5 and 8.6).</p></div><div><b>About this demo</b><p>Matching runs in your browser using a transparent weighted-scoring model on a sample of 18 roles. A production version would add live job feeds, employer partners, course catalogues and an LLM assistant.</p></div><div><b>Privacy</b><p>Your inputs are saved only on this device. Course platforms named are suggestions, not endorsements.</p></div></div></footer>
+
+<script>
+const G={"Office & Admin":["MS Excel","Typing","Data entry","Tally / Accounting","Project coordination"],"Communication & Sales":["Communication","English speaking","Regional language","Customer support","Sales"],"Digital & Creative":["Digital marketing","Social media","Content writing","Graphic design","Video editing"],"Tech":["Python","JavaScript","HTML/CSS","SQL","Data analysis"],"Technical & Teaching":["Computer hardware","Basic electrical","Teaching"]};
+const ALL=Object.values(G).flat(),EDU=["12th pass","ITI / Diploma","Graduate","Postgraduate"],INT=["Technology","Business","Creative","Education","Finance","Service"];
+const CITIES=["Jaipur","Indore","Lucknow","Nagpur","Coimbatore","Bhubaneswar","Surat","Patna","Mysuru","Nashik","Ranchi","Other Tier-2/3 city"];
+// [title, category, remote?, min education, core skills, helpful skills]
+const J=[["Customer Support Executive","Service",1,0,["Communication","Customer support","Typing"],["English speaking","Regional language"]],
+["Data Entry Operator","Business",1,0,["Typing","Data entry"],["MS Excel"]],
+["Back-office / MIS Executive","Business",0,1,["MS Excel","Data entry"],["Data analysis","Typing"]],
+["Junior Accountant","Finance",0,2,["Tally / Accounting","MS Excel"],["Data entry"]],
+["Bookkeeper (remote)","Finance",1,1,["Tally / Accounting","Data entry"],["MS Excel"]],
+["Sales Executive","Business",0,0,["Sales","Communication"],["Regional language","English speaking"]],
+["Inside Sales Executive","Business",1,0,["Sales","Communication"],["Customer support","Typing"]],
+["Digital Marketing Associate","Creative",1,1,["Digital marketing","Social media"],["Content writing","Graphic design"]],
+["Social Media Executive","Creative",1,1,["Social media","Content writing"],["Graphic design","Video editing"]],
+["Content Writer","Creative",1,2,["Content writing","English speaking"],["Social media","Digital marketing"]],
+["Graphic Designer","Creative",1,1,["Graphic design"],["Social media","Video editing"]],
+["Video Editor","Creative",1,1,["Video editing"],["Graphic design","Social media"]],
+["Junior Web Developer","Tech",1,2,["HTML/CSS","JavaScript"],["SQL","Python"]],
+["Python Developer (Trainee)","Tech",1,2,["Python"],["SQL","Data analysis"]],
+["Data Analyst (Entry level)","Tech",1,2,["Data analysis","MS Excel"],["SQL","Python"]],
+["Online Tutor","Education",1,2,["Teaching","Communication"],["English speaking","Regional language"]],
+["IT Support Technician","Tech",0,1,["Computer hardware","Communication"],["Customer support"]],
+["Electrical Technician Assistant","Service",0,1,["Basic electrical"],["Project coordination","Communication"]]];
+const TECH=["Python","JavaScript","HTML/CSS","SQL","Data analysis","Computer hardware","Basic electrical"],DIG=["Digital marketing","Social media","Content writing","Graphic design","Video editing"];
+const PLAT=s=>TECH.includes(s)?"NPTEL or freeCodeCamp":DIG.includes(s)?"Skill India Digital Hub or Google Digital Garage":"SWAYAM or Skill India Digital Hub";
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function load(){try{return JSON.parse(localStorage.getItem("pf2"))}catch(e){return null}}
+function save(){try{localStorage.setItem("pf2",JSON.stringify(S))}catch(e){}}
+const S=Object.assign({skills:[],custom:[],interests:[],mode:"any",done:{},sel:"",f:{name:"",contact:"",city:"Jaipur",edu:2,exp:"",sum:""}},load()||{});
+const base=()=>new Set([...S.skills,...S.custom]),eff=()=>new Set([...base(),...Object.keys(S.done).filter(k=>S.done[k])]);
+function rankAll(){const h=eff(),ei=+S.f.edu;
+return J.map(([t,c,r,e,core,plus])=>{const cH=core.filter(s=>h.has(s)),sk=(2*cH.length+plus.filter(s=>h.has(s)).length)/(2*core.length+plus.length);
+const it=S.interests.length?(S.interests.includes(c)?1:0):.5,mo=S.mode==="any"?1:S.mode==="remote"?(r?1:.3):(r?.6:1),ed=ei>=e?1:.3;
+return{t,c,r,e,core,plus,cH,sk,it,mo,ed,miss:[...core,...plus].filter(s=>!h.has(s)),score:Math.round(100*(.65*sk+.15*it+.1*mo+.1*ed))}}).sort((a,b)=>b.score-a.score)}
+let R=[];
+function chip(t,on,fn,x){const b=document.createElement("button");b.type="button";b.className="chip"+(on?" on":"");b.textContent=x?t+" ×":t;b.setAttribute("aria-pressed",on);b.onclick=()=>{fn();if(!x){b.classList.toggle("on");b.setAttribute("aria-pressed",b.classList.contains("on"))}after(x)};return b}
+function toggle(a,v){const i=a.indexOf(v);i<0?a.push(v):a.splice(i,1)}
+function buildSkills(){const el=$("sk");el.innerHTML="";Object.entries(G).forEach(([g,l])=>{const d=document.createElement("div");d.className="grp";d.innerHTML=`<div class="gt">${g}</div>`;const w=document.createElement("div");w.className="chips";l.forEach(s=>w.appendChild(chip(s,S.skills.includes(s),()=>toggle(S.skills,s))));d.appendChild(w);el.appendChild(d)});filter()}
+function buildCust(){const el=$("cust");el.innerHTML="";S.custom.forEach(s=>el.appendChild(chip(s,true,()=>toggle(S.custom,s),1)))}
+function filter(){const v=$("q").value.trim().toLowerCase();document.querySelectorAll("#sk .chip").forEach(b=>b.style.display=b.textContent.toLowerCase().includes(v)?"":"none")}
+function after(x){save();if(x)buildCust();renderAll()}
+$("q").oninput=filter;
+$("q").onkeydown=e=>{if(e.key!=="Enter")return;e.preventDefault();const v=e.target.value.trim();if(!v)return;const m=ALL.find(s=>s.toLowerCase()===v.toLowerCase());
+if(m){if(!S.skills.includes(m))S.skills.push(m);buildSkills()}else if(!S.custom.some(s=>s.toLowerCase()===v.toLowerCase())){S.custom.push(v);buildCust()}
+e.target.value="";filter();after()};
+function renderResults(){const has=eff().size>0;$("rep").classList.toggle("hide",!has);if(!has){R=[];$("rl").innerHTML='<div class="empty"><b>No matches yet</b><br>Select at least one skill above to see your best-fit roles.</div>';return}R=rankAll().filter(x=>x.sk>0).slice(0,6);
+$("rl").innerHTML=R.length?R.map((x,i)=>`<div class="job"><div class="jh"><h3>${i+1}. ${esc(x.t)}${i===0?' <span class="best">Best match</span>':""}</h3><span class="score ${x.score>=70?"":x.score>=40?"mid":"lo"}">${x.score}% match</span></div><div class="bar"><i style="width:${x.score}%"></i></div>
+<div class="hint">${x.r?"Remote-friendly":"On-site / local"} · ${x.c} · Needs ${EDU[x.e]} or above${x.ed<1?" (above your level: upskill first)":""}</div>
+<div class="hint">Why: ${x.cH.length}/${x.core.length} core skills${S.interests.includes(x.c)?", matches your interests":""}${S.mode==="remote"&&x.r?", fits remote preference":""}${S.mode==="onsite"&&!x.r?", fits on-site preference":""}</div>
+<div>${[...x.core,...x.plus].filter(s=>!x.miss.includes(s)).map(s=>`<span class="tag ok">✓ ${esc(s)}</span>`).join("")}${x.miss.map(s=>`<span class="tag gap">Learn: ${esc(s)}</span>`).join("")}</div>
+<button class="btn ${S.sel===x.t?"":"sec"}" data-i="${i}">${S.sel===x.t?"Selected":"Open plan & résumé"}</button></div>`).join(""):`<p class="hint">No role matches yet. Pick skills from the list; custom skills appear on your résumé but need a listed skill to match roles.</p>`;
+document.querySelectorAll("[data-i]").forEach(b=>b.onclick=()=>{S.sel=R[+b.dataset.i].t;S.f.sum="";save();renderAll();$("sum").value=autoSum();$("plan").scrollIntoView({behavior:"smooth"})})}
+const cur=()=>rankAll().find(x=>x.t===S.sel);
+function autoSum(){const x=cur();if(!x)return"";const left=x.miss.slice(0,3);return `${EDU[S.f.edu]} candidate from ${S.f.city} seeking a ${x.t} role. Strengths in ${[...eff()].slice(0,4).join(", ")||"learning quickly"}.${left.length?" Actively upskilling in "+left.join(", ")+".":""} Reliable, quick to learn and ready to contribute from day one.`}
+function renderPlan(){const x=cur();$("plan").classList.toggle("hide",!x);$("resCard").classList.toggle("hide",!x);if(!x)return;
+const items=[...x.core,...x.plus].filter(s=>!base().has(s)),open=items.filter(s=>!S.done[s]),pct=Math.round(100*x.sk);
+$("pb").innerHTML=`<h3>${esc(x.t)}</h3><div class="hint">Readiness: ${pct}%${x.ed<1?" · Needs "+EDU[x.e]+" or above":""}</div><div class="bar"><i style="width:${pct}%"></i></div>
+${items.length?`<label>Tick a skill once you have learned it. Your matches update instantly.</label>${items.map(s=>`<label class="ck"><input type="checkbox" data-d="${esc(s)}" ${S.done[s]?"checked":""}><span>${esc(s)}${x.core.includes(s)?" (core)":""}<br><span class="hint">Learn via ${PLAT(s)}</span></span></label>`).join("")}`:`<p>You already have every skill listed for this role. Focus on applying.</p>`}
+<label>Your 4-week plan</label>${open.slice(0,3).map((s,i)=>`<div class="week"><b>Week ${i+1}:</b> Learn ${esc(s)} (about 8 to 10 hours) and finish one small practice task you can show.</div>`).join("")}<div class="week"><b>${Math.min(open.length,3)+1===1?"Week 1":"Week "+(Math.min(open.length,3)+1)}:</b> Update your résumé, then apply to 5 openings. Search "${esc(x.t)}" with "${esc(S.f.city)}" and "remote" on Naukri, LinkedIn, Apna and local employer pages; ask your college placement cell too.</div>`;
+document.querySelectorAll("[data-d]").forEach(c=>c.onchange=()=>{S.done[c.dataset.d]=c.checked;save();renderAll()});if(!S.f.sum&&document.activeElement!==$("sum"))$("sum").value=autoSum()}
+function resumeText(){const x=cur();if(!x)return"";const ex=S.f.exp.split("\n").map(l=>l.trim()).filter(Boolean).map(l=>"- "+l.replace(/^[-•*]\s*/,"")).join("\n");
+return `${(S.f.name||"Your Name").toUpperCase()}\n${S.f.city}${S.f.contact?" | "+S.f.contact:""}\nTarget role: ${x.t}\n\nPROFESSIONAL SUMMARY\n${S.f.sum||autoSum()}\n\nKEY SKILLS\n${[...eff()].join(" | ")}\n\nEDUCATION\n- ${EDU[S.f.edu]}\n${ex?"\nEXPERIENCE / PROJECTS\n"+ex+"\n":""}\nWORK PREFERENCE\n- ${S.mode==="remote"?"Remote":S.mode==="onsite"?"On-site in "+S.f.city:"Open to remote or on-site work"}`}
+const renderResume=()=>{$("rp").textContent=resumeText()};
+function steps(){const d=[!!S.f.name||eff().size>0,eff().size>0&&R.length>0,!!S.sel,!!S.sel&&!!S.f.name];document.querySelectorAll(".steps a").forEach((a,i)=>a.classList.toggle("done",d[i]))}
+function renderAll(){renderResults();renderPlan();renderResume();steps()}
+// form wiring
+$("city").innerHTML=CITIES.map(c=>`<option>${c}</option>`).join("");$("edu").innerHTML=EDU.map((e,i)=>`<option value="${i}">${e}</option>`).join("");
+$("city").value=S.f.city;$("edu").value=S.f.edu;$("mode").value=S.mode;$("name").value=S.f.name;$("contact").value=S.f.contact;$("exp").value=S.f.exp;
+$("int").innerHTML="";INT.forEach(i=>$("int").appendChild(chip(i,S.interests.includes(i),()=>toggle(S.interests,i))));
+[["name","name"],["contact","contact"],["city","city"],["edu","edu"],["exp","exp"]].forEach(([id,k])=>$(id).oninput=()=>{S.f[k]=$(id).value;save();id==="name"||id==="contact"||id==="exp"?renderResume():renderAll()});
+$("mode").onchange=()=>{S.mode=$("mode").value;save();renderAll()};
+$("sum").oninput=()=>{S.f.sum=$("sum").value;save();renderResume()};
+$("regen").onclick=()=>{S.f.sum="";save();$("sum").value=autoSum();renderResume()};
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText(resumeText());$("copy").textContent="Copied"}catch(e){$("copy").textContent="Select the text and copy"}setTimeout(()=>$("copy").textContent="Copy text",1800)};
+$("dl").onclick=()=>{try{const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([resumeText()],{type:"text/plain"}));a.download=(S.f.name||"resume").replace(/\s+/g,"_")+"_resume.txt";a.click()}catch(e){$("dl").textContent="Use Copy text instead"}};
+$("print").onclick=()=>{try{window.print()}catch(e){}};
+$("rep").onclick=async()=>{const t=`PATHFINDER AI CAREER REPORT\nCity: ${S.f.city} | Education: ${EDU[S.f.edu]}\nSkills: ${[...eff()].join(", ")}\n\nTOP MATCHES\n${R.map((x,i)=>`${i+1}. ${x.t} - ${x.score}% (missing: ${x.miss.join(", ")||"none"})`).join("\n")}`;try{await navigator.clipboard.writeText(t);$("rep").textContent="Copied"}catch(e){$("rep").textContent="Copy not available"}setTimeout(()=>$("rep").textContent="Copy my career report",1800)};
+$("reset").onclick=()=>{if(confirm("Clear everything and start over?")){try{localStorage.removeItem("pf2")}catch(e){}location.reload()}};
+buildSkills();buildCust();renderAll();if(S.f.sum)$("sum").value=S.f.sum;
+</script>
+</body>
+</html>
